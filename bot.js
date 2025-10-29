@@ -2,6 +2,14 @@ const { Client, GatewayIntentBits, AttachmentBuilder } = require("discord.js");
 const fetch = require("node-fetch");
 require("dotenv").config();
 
+const express = require('express');
+const app = express();
+const port = process.env.PORT || 10000;
+
+app.listen(port, () => {
+    console.log(`Rotibot listening on port ${port}`);
+})
+
 const client = new Client({
     intents: [
         GatewayIntentBits.Guilds,
@@ -18,8 +26,8 @@ client.on("messageCreate", async (message) => {
     // ignore other bots
     if (message.author.bot) return;
     // restrict to BOT channel
-    const BOT_CHANNEL_ID = "1432781058000158771";
-    if (message.channel.id !== BOT_CHANNEL_ID) return;
+    // const BOT_CHANNEL_ID = "1432781058000158771";
+    if (message.channel.id !== process.env.BOT_CHANNEL_ID) return;
     // handle only valid commands
     if (!(message.content.startsWith("!json") || message.content.startsWith("!dict") || message.content.startsWith("!help"))) return;
 

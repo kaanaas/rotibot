@@ -77,6 +77,13 @@ client.on("messageCreate", async (message) => {
 
     const args = message.content.slice(PREFIX.length).trim().split(/ +/);
     const command = args.shift().toLowerCase();
+
+    if (command == "help") {
+        return message.reply("`dict`: Create a link to the online dictionary for a given query\n`doc`: Search for and return a document from the database as a .txt file");
+    } else if (command == "ping") {
+        return message.reply("Pong!");
+    }
+
     const query = message.content.split(" ").slice(PREFIX.length).join(" ").toLowerCase().trim().normalize('NFD').replace(/\p{Diacritic}/gu, '').replace(/,/g, '').replace(/-/g, ' ').replace(/[‘’]/g, '\'');
     if (!query) return;
 
@@ -86,17 +93,15 @@ client.on("messageCreate", async (message) => {
         });
 
         const data = await res.json();
-        if (!Array.isArray(docs) || docs.length === 0) {
-            return message.reply(`No results found for: \`**${query}**\``);
+        if (!Array.isArray(data) || data.length === 0) {
+            return message.reply(`No results found for: **\`${query}\`**`);
         }
 
         if (data.error) {
             return message.reply(`❌ ${data.error}`);
         }
 
-        if (command == "help") {
-            return message.reply("Use `!dict [QUERY]` to create a link to a word in the dictionary. Use `!doc [QUERY]` to retrieve data from the database.");
-        } else if (command == "dict") {
+        if (command == "dict") {
             return message.reply(`https://singlishdict.app/?q=${encodeURIComponent(data[0].trieId)}`);
         } else if (command == "doc") {
             const jsonString = JSON.stringify(data, null, 2);
@@ -105,7 +110,7 @@ client.on("messageCreate", async (message) => {
                 name: `${query}.txt`
             });
             return message.reply({
-                content: `Result for \`**${query}**\`:`, files: [attachment]
+                content: `Result for **\`${query}\`**:`, files: [attachment]
             });
         }
     } catch (err) {

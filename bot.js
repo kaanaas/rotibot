@@ -9,6 +9,8 @@ const express = require('express');
 const app = express();
 const port = process.env.PORT || 10000;
 
+const PREFIX = '!';
+
 app.listen(port, () => {
     console.log(`Rotibot listening on port ${port}`);
 })
@@ -47,7 +49,7 @@ client.on("interactionCreate", async (interaction) => {
     // If interaction is in a DM (no guildId)
     if (!interaction.guildId) {
         if (interaction.user.id !== OWNER_ID) interaction.reply({
-            content: "Paiseh, you cannot use this command in DMs.",
+            content: "Paiseh, you are not authorized to use this command in DMs.",
             ephemeral: true
         });
     }
@@ -63,47 +65,54 @@ client.on("interactionCreate", async (interaction) => {
     }
 })
 
-// // OLD (! commands)
-// client.on("messageCreate", async (message) => {
-//     // ignore other bots
-//     if (message.author.bot) return;
-//     // restrict to BOT channel
-//     if (message.channel.id !== process.env.BOT_CHANNEL_ID) return;
-//     // handle only valid commands
-//     if (!(message.content.startsWith("!json") || message.content.startsWith("!dict") || message.content.startsWith("!help"))) return;
+// OLD ! commands for DM
+client.on("messageCreate", async (message) => {
+    // ignore other bots
+    if (message.author.bot) return;
+    // only owner can use
+    if (message.author.id !== process.env.OWNER_ID) message.reply(`Paiseh, you are not authorized to use this command in DMs.`);
+    // restrict to DMs
+    if (message.channel.type !== 1) return;
+    // handle only valid commands
+    if (!(message.content.startsWith(PREFIX))) return;
 
-//     const query = message.content.split(" ").slice(1).join(" ").toLowerCase().trim().normalize('NFD').replace(/\p{Diacritic}/gu, '').replace(/,/g, '').replace(/-/g, ' ').replace(/[‘’]/g, '\'');
-//     if (!query) return;
+    const args = message.content.slice(PREFIX.length).trim().split(/ +/);
+    const command = args.shift().toLowerCase();
+    const query = message.content.split(" ").slice(PREFIX.length).join(" ").toLowerCase().trim().normalize('NFD').replace(/\p{Diacritic}/gu, '').replace(/,/g, '').replace(/-/g, ' ').replace(/[‘’]/g, '\'');
+    if (!query) return;
 
-//     try {
-//         const res = await fetch(`${process.env.API_URL}?q=${encodeURIComponent(query)}`, {
-//             headers: { "x-api-key": process.env.API_KEY }
-//         });
+    try {
+        const res = await fetch(`${process.env.API_URL}?q=${encodeURIComponent(query)}`, {
+            headers: { "x-api-key": process.env.API_KEY }
+        });
 
-//         const data = await res.json();
+        const data = await res.json();
+        if (!Array.isArray(docs) || docs.length === 0) {
+            return message.reply(`No results found for: \`**${query}**\``);
+        }
 
-//         if (data.error) {
-//             return message.reply(`❌ ${data.error}`);
-//         }
+        if (data.error) {
+            return message.reply(`❌ ${data.error}`);
+        }
 
-//         if (message.content.startsWith("!help")) {
-//             return message.reply("Use `!dict [QUERY]` to create a link to a word in the dictionary. Use `!json [QUERY]` to retrieve data from the database.");
-//         } else if (message.content.startsWith("!dict")) {
-//             return message.reply(`https://singlishdict.app/?q=${encodeURIComponent(data[0].trieId)}`);
-//         } else if (message.content.startsWith("!json")) {
-//             const jsonString = JSON.stringify(data, null, 2);
-//             // convert to file attachment (often >4000 char limit)
-//             const attachment = new AttachmentBuilder(Buffer.from(jsonString, "utf-8"), {
-//                 name: `${query}.txt`
-//             });
-//             return message.reply({
-//                 content: `**${query}**`, files: [attachment]
-//             });
-//         }
-//     } catch (err) {
-//         console.error(err);
-//         message.reply("⚠️ Got problem calling the API.");
-//     }
-// })
+        if (command == "help") {
+            return message.reply("Use `!dict [QUERY]` to create a link to a word in the dictionary. Use `!doc [QUERY]` to retrieve data from the database.");
+        } else if (command == "dict") {
+            return message.reply(`https://singlishdict.app/?q=${encodeURIComponent(data[0].trieId)}`);
+        } else if (command == "doc") {
+            const jsonString = JSON.stringify(data, null, 2);
+            // convert to file attachment (often >4000 char limit)
+            const attachment = new AttachmentBuilder(Buffer.from(jsonString, "utf-8"), {
+                name: `${query}.txt`
+            });
+            return message.reply({
+                content: `Result for \`**${query}**\`:`, files: [attachment]
+            });
+        }
+    } catch (err) {
+        console.error(err);
+        message.reply("⚠️ Got problem calling the API.");
+    }
+})
 
 client.login(process.env.DISCORD_TOKEN);

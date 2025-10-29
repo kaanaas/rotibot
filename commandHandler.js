@@ -18,7 +18,7 @@ async function registerCommands(client) {
     try {
         console.log('⏳ Updating slash commands...');
         await rest.put(
-            Routes.applicationGuildCommands(process.env.CLIENT_ID),
+            Routes.applicationGuildCommands(process.env.CLIENT_ID, process.env.GUILD_ID),
             { body: commands },
         );
         console.log('✅ Slash commands updated automatically!');

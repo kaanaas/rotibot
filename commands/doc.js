@@ -14,7 +14,7 @@ module.exports = {
     async execute(interaction) {
         await interaction.deferReply();     // For slow API requests
 
-        const query = interaction.options.getString('query').split(" ").slice(1).join(" ").toLowerCase().trim().normalize('NFD').replace(/\p{Diacritic}/gu, '').replace(/,/g, '').replace(/-/g, ' ').replace(/[‘’]/g, '\'');
+        const query = interaction.options.getString('query').toLowerCase().trim().normalize('NFD').replace(/\p{Diacritic}/gu, '').replace(/,/g, '').replace(/-/g, ' ').replace(/[‘’]/g, '\'');
         const apiURL = `https://singlishdict.app/?q=${encodeURIComponent(query)}`;
 
         try {

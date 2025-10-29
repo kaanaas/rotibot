@@ -68,10 +68,10 @@ client.on("interactionCreate", async (interaction) => {
 client.on("messageCreate", async (message) => {
     // ignore other bots
     if (message.author.bot) return;
-    // only owner can use
-    if (message.author.id !== process.env.OWNER_ID) message.reply(`Paiseh, you are not authorized to use this command in DMs.`);
-    // restrict to DMs
-    if (message.channel.type !== 1) return;
+    // // only owner can use
+    // if (message.author.id !== process.env.OWNER_ID) message.reply(`Paiseh, you are not authorized to use this command in DMs.`);
+    // // restrict to DMs
+    // if (message.channel.type !== 1) return;
     // handle only valid commands
     if (!(message.content.startsWith(PREFIX))) return;
 

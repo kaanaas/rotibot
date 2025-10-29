@@ -1,7 +1,7 @@
 require("dotenv").config();
 const fs = require("fs");
 const path = require("path");
-const { Client, Collection, GatewayIntentBits, AttachmentBuilder } = require("discord.js");
+const { Client, Collection, GatewayIntentBits, AttachmentBuilder, MessageFlags } = require("discord.js");
 const { registerCommands } = require("./commandHandler");
 // const fetch = require("node-fetch");
 
@@ -55,7 +55,7 @@ client.on("interactionCreate", async (interaction) => {
         await command.execute(interaction);
     } catch (err) {
         console.error(err);
-        await interaction.reply({ content: 'Got problem executing this command...', ephemeral: true });
+        await interaction.reply({ content: 'Got problem executing this command...', flags: MessageFlags.Ephemeral });
     }
 })
 

@@ -79,7 +79,7 @@ client.on("messageCreate", async (message) => {
     const command = args.shift().toLowerCase();
 
     if (command == "help") {
-        return message.reply("`dict`: Create a link to the online dictionary for a given query\n`doc`: Search for and return a document from the database as a .txt file");
+        return message.reply("`!dict`: Create a link to the online dictionary for a given query\n`!doc`: Search for and return a document from the database as a .txt file");
     } else if (command == "ping") {
         return message.reply("Pong!");
     }

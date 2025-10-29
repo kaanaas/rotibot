@@ -26,7 +26,6 @@ client.on("messageCreate", async (message) => {
     // ignore other bots
     if (message.author.bot) return;
     // restrict to BOT channel
-    // const BOT_CHANNEL_ID = "1432781058000158771";
     if (message.channel.id !== process.env.BOT_CHANNEL_ID) return;
     // handle only valid commands
     if (!(message.content.startsWith("!json") || message.content.startsWith("!dict") || message.content.startsWith("!help"))) return;

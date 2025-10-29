@@ -19,9 +19,8 @@ const client = new Client({
     intents: [
         GatewayIntentBits.DirectMessages,
         GatewayIntentBits.Guilds,
-
-        // GatewayIntentBits.GuildMessages,
-        // GatewayIntentBits.MessageContent,
+        GatewayIntentBits.GuildMessages,
+        GatewayIntentBits.MessageContent,
     ],
     partials: ['CHANNEL'],      // for DMs
 });

@@ -17,6 +17,7 @@ const client = new Client({
     intents: [
         GatewayIntentBits.DirectMessages,
         GatewayIntentBits.Guilds,
+
         // GatewayIntentBits.GuildMessages,
         // GatewayIntentBits.MessageContent,
     ],
@@ -45,7 +46,10 @@ client.on("interactionCreate", async (interaction) => {
 
     // If interaction is in a DM (no guildId)
     if (!interaction.guildId) {
-        if (interaction.user.id !== OWNER_ID) return;
+        if (interaction.user.id !== OWNER_ID) interaction.reply({
+            content: "Paiseh, you cannot use this command in DMs.",
+            ephemeral: true
+        });
     }
 
     const command = client.commands.get(interaction.commandName);

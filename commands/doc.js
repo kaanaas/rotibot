@@ -1,4 +1,4 @@
-const { SlashCommandBuilder, AttachmentBuilder } = require('discord.js');
+const { SlashCommandBuilder, InteractionContextType, AttachmentBuilder } = require('discord.js');
 const fetch = require("node-fetch");
 
 function fetchWithTimeout(url, options = {}, timeout = 7000) {
@@ -17,7 +17,7 @@ module.exports = {
             option.setName("query")
                 .setDescription("Search query")
                 .setRequired(true))
-        .setContexts([0, 1]),
+        .setContexts([InteractionContextType.Guild, InteractionContextType.BotDM]),
 
     async execute(interaction) {
         await interaction.deferReply();     // For slow API requests
@@ -32,7 +32,7 @@ module.exports = {
             const data = await res.json();
 
             if (!Array.isArray(data) || data.length === 0) {
-                return interaction.editReply(`Neh find anything for: **${query}**`);
+                return interaction.editReply(`Neh find anything for: **\`${query}\`**`);
             }
 
             if (data.error) {
@@ -46,7 +46,7 @@ module.exports = {
             });
 
             await interaction.editReply({
-                content: `Result for **${query}**:`,
+                content: `Result for **\`${query}\`**:`,
                 files: [attachment]
             });
         } catch (err) {

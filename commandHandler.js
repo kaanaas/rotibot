@@ -13,7 +13,7 @@ async function registerCommands(client) {
         commands.push(command.data.toJSON());
     }
 
-    const rest = new REST({ version: '10' }).setToken(process.env.TOKEN);
+    const rest = new REST({ version: '10' }).setToken(process.env.DISCORD_TOKEN);
 
     try {
         console.log('⏳ Updating slash commands...');

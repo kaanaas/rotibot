@@ -5,11 +5,11 @@ module.exports = {
     data: new SlashCommandBuilder()
         .setName("dict")
         .setDescription("Create a web link to a given query")
-        .addStringOption(option => {
+        .addStringOption(option =>
             option.setName("query")
                 .setDescription("Search query")
                 .setRequired(true)
-        }),
+        ),
 
     async execute(interaction) {
         await interaction.deferReply();     // For slow API requests

@@ -5,11 +5,11 @@ module.exports = {
     data: new SlashCommandBuilder()
         .setName("doc")
         .setDescription("Search for and return a document from the database as a .txt file")
-        .addStringOption(option => {
+        .addStringOption(option =>
             option.setName("query")
                 .setDescription("Search query")
                 .setRequired(true)
-        }),
+        ),
 
     async execute(interaction) {
         await interaction.deferReply();     // For slow API requests

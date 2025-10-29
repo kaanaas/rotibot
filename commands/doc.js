@@ -8,9 +8,8 @@ module.exports = {
         .addStringOption(option =>
             option.setName("query")
                 .setDescription("Search query")
-                .setRequired(true)
-                .setContexts([0, 1]),
-        ),
+                .setRequired(true))
+        .setContexts([0, 1]),
 
     async execute(interaction) {
         await interaction.deferReply();     // For slow API requests

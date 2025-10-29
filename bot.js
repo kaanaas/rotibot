@@ -15,10 +15,12 @@ app.listen(port, () => {
 
 const client = new Client({
     intents: [
+        GatewayIntentBits.DirectMessages,
         GatewayIntentBits.Guilds,
-        GatewayIntentBits.GuildMessages,
-        GatewayIntentBits.MessageContent
-    ]
+        // GatewayIntentBits.GuildMessages,
+        // GatewayIntentBits.MessageContent,
+    ],
+    partials: ['CHANNEL'],      // for DMs
 });
 
 const commandsPath = path.join(__dirname, 'commands');
@@ -40,6 +42,11 @@ client.once("clientReady", async () => {
 
 client.on("interactionCreate", async (interaction) => {
     if (!interaction.isChatInputCommand()) return;
+
+    // If interaction is in a DM (no guildId)
+    if (!interaction.guildId) {
+        if (interaction.user.id !== OWNER_ID) return;
+    }
 
     const command = client.commands.get(interaction.commandName);
     if (!command) return;

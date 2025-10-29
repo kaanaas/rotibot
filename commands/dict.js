@@ -20,6 +20,7 @@ module.exports = {
         try {
             const res = await fetch(apiURL);
             const data = await res.json();
+            console.log(data);
 
             if (!Array.isArray(data) || data.length === 0) {
                 return interaction.editReply(`Neh find anything for: **${query}**`);

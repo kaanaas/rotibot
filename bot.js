@@ -13,7 +13,18 @@ const PREFIX = '!';
 
 app.listen(port, () => {
     console.log(`Rotibot listening on port ${port}`);
-})
+});
+
+// Basic root route
+app.get("/", (req, res) => {
+  res.send("Hello, I am Rotibot!");
+});
+
+// Ping route for cron-job.org
+app.get("/ping", (req, res) => {
+  console.log(`[PING] Received wakey-wakey ping.`);
+  res.send("OK");
+});
 
 const client = new Client({
     intents: [

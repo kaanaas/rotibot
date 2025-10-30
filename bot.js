@@ -107,7 +107,7 @@ client.on("messageCreate", async (message) => {
             const jsonString = JSON.stringify(data, null, 2);
             // convert to file attachment (often >4000 char limit)
             const attachment = new AttachmentBuilder(Buffer.from(jsonString, "utf-8"), {
-                name: `${query}.txt`
+                name: `${query}.json`
             });
             return message.reply({
                 content: `Result for **\`${query}\`**:`, files: [attachment]

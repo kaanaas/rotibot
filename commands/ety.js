@@ -22,7 +22,7 @@ module.exports = {
     async execute(interaction) {
         await interaction.deferReply();     // For slow API requests
 
-        const query = interaction.options.getString('query').toLowerCase().trim().normalize('NFD').replace(/,/g, '').replace(/-/g, ' ').replace(/[‘’]/g, '\'');
+        const query = interaction.options.getString('query').toLowerCase().trim().normalize('NFD').replace(/,/g, '').replace(/[‘’]/g, '\'');
         const apiURL = `${process.env.API_URL}/ety?q=${encodeURIComponent(query)}`;
 
         try {

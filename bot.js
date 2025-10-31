@@ -98,23 +98,21 @@ client.on("messageCreate", async (message) => {
     const query = message.content.split(" ").slice(PREFIX.length).join(" ").toLowerCase().trim().normalize('NFD').replace(/\p{Diacritic}/gu, '').replace(/,/g, '').replace(/-/g, ' ').replace(/[‘’]/g, '\'');
     if (!query) return;
 
-    try {
-        const res = await fetch(`${process.env.API_URL}/doc?q=${encodeURIComponent(query)}`, {
-            headers: { "x-api-key": process.env.API_KEY }
-        });
+    if (command == "ety") {
+        try {
+            const res = await fetch(`${process.env.API_URL}/ety?q=${encodeURIComponent(query)}`, {
+                headers: { "x-api-key": process.env.API_KEY }
+            });
 
-        const data = await res.json();
-        if (!Array.isArray(data) || data.length === 0) {
-            return message.reply(`No results found for: **\`${query}\`**`);
-        }
+            const data = await res.json();
+            if (!Array.isArray(data) || data.length === 0) {
+                return message.reply(`No results found for: **\`${query}\`**`);
+            }
 
-        if (data.error) {
-            return message.reply(`❌ ${data.error}`);
-        }
+            if (data.error) {
+                return message.reply(`❌ ${data.error}`);
+            }
 
-        if (command == "dict") {
-            return message.reply(`https://singlishdict.app/?q=${encodeURIComponent(data[0].trieId)}`);
-        } else if (command == "doc") {
             const jsonString = JSON.stringify(data, null, 2);
             // convert to file attachment (often >4000 char limit)
             const attachment = new AttachmentBuilder(Buffer.from(jsonString, "utf-8"), {
@@ -123,10 +121,44 @@ client.on("messageCreate", async (message) => {
             return message.reply({
                 content: `Result for **\`${query}\`**:`, files: [attachment]
             });
+
+        } catch (err) {
+            console.error(err);
+            message.reply("⚠️ Got problem calling the API.");
         }
-    } catch (err) {
-        console.error(err);
-        message.reply("⚠️ Got problem calling the API.");
+    }
+
+    else {
+        try {
+            const res = await fetch(`${process.env.API_URL}/doc?q=${encodeURIComponent(query)}`, {
+                headers: { "x-api-key": process.env.API_KEY }
+            });
+
+            const data = await res.json();
+            if (!Array.isArray(data) || data.length === 0) {
+                return message.reply(`No results found for: **\`${query}\`**`);
+            }
+
+            if (data.error) {
+                return message.reply(`❌ ${data.error}`);
+            }
+
+            if (command == "dict") {
+                return message.reply(`https://singlishdict.app/?q=${encodeURIComponent(data[0].trieId)}`);
+            } else if (command == "doc") {
+                const jsonString = JSON.stringify(data, null, 2);
+                // convert to file attachment (often >4000 char limit)
+                const attachment = new AttachmentBuilder(Buffer.from(jsonString, "utf-8"), {
+                    name: `${query}.json`
+                });
+                return message.reply({
+                    content: `Result for **\`${query}\`**:`, files: [attachment]
+                });
+            }
+        } catch (err) {
+            console.error(err);
+            message.reply("⚠️ Got problem calling the API.");
+        }
     }
 })
 

@@ -17,13 +17,13 @@ app.listen(port, () => {
 
 // Basic root route
 app.get("/", (req, res) => {
-  res.send("Hello, I am Rotibot!");
+    res.send("Hello, I am Rotibot!");
 });
 
 // Ping route for cron-job.org
 app.get("/ping", (req, res) => {
-  console.log(`[PING] Received wakey-wakey ping.`);
-  res.send("OK");
+    console.log(`[PING] Received wakey-wakey ping.`);
+    res.send("OK");
 });
 
 const client = new Client({
@@ -75,7 +75,7 @@ client.on("interactionCreate", async (interaction) => {
     }
 })
 
-// OLD ! commands for DM
+// OLD ! commands
 client.on("messageCreate", async (message) => {
     // ignore other bots
     if (message.author.bot) return;
@@ -90,7 +90,7 @@ client.on("messageCreate", async (message) => {
     const command = args.shift().toLowerCase();
 
     if (command == "help") {
-        return message.reply("`!dict`: Create a link to the online dictionary for a given query\n`!doc`: Search for and return a document from the database as a .txt file");
+        return message.reply("`!dict`: Create a link to the online dictionary for a given query\n`!doc`: Search for and return a document from the database as a .json file\n`!ety`: Search for and return an etymology from the database as a .json file");
     } else if (command == "ping") {
         return message.reply("Pong!");
     }
@@ -99,7 +99,7 @@ client.on("messageCreate", async (message) => {
     if (!query) return;
 
     try {
-        const res = await fetch(`${process.env.API_URL}?q=${encodeURIComponent(query)}`, {
+        const res = await fetch(`${process.env.API_URL}/doc?q=${encodeURIComponent(query)}`, {
             headers: { "x-api-key": process.env.API_KEY }
         });
 

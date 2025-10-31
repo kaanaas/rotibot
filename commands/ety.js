@@ -23,7 +23,7 @@ module.exports = {
         await interaction.deferReply();     // For slow API requests
 
         const query = interaction.options.getString('query').toLowerCase().trim().normalize('NFD').replace(/\p{Diacritic}/gu, '').replace(/,/g, '').replace(/-/g, ' ').replace(/[‘’]/g, '\'');
-        const apiURL = `${process.env.API_URL}?q=${encodeURIComponent(query)}`;
+        const apiURL = `${process.env.API_URL}/ety?q=${encodeURIComponent(query)}`;
 
         try {
             const res = await fetchWithTimeout(apiURL, {

@@ -11,8 +11,8 @@ function fetchWithTimeout(url, options = {}, timeout = 7000) {
 
 module.exports = {
     data: new SlashCommandBuilder()
-        .setName("doc")
-        .setDescription("Search for and return a document from the database as a .json file")
+        .setName("ety")
+        .setDescription("Search for and return an etymology from the database as a .json file")
         .addStringOption(option =>
             option.setName("query")
                 .setDescription("Search query")

@@ -6,6 +6,6 @@ module.exports = {
         .setDescription("List commands")
         .setContexts([InteractionContextType.Guild, InteractionContextType.BotDM]),
     async execute(interaction) {
-        await interaction.reply("`dict`: Create a link to the online dictionary for a given query\n`doc`: Search for and return a document from the database as a .txt file");
+        await interaction.reply("`dict`: Create a link to the online dictionary for a given query\n`doc`: Search for and return a document from the database as a .txt file\n`!ety`: Search for and return an etymology from the database as a .json file");
     }
 };

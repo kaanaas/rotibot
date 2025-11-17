@@ -40,7 +40,7 @@ module.exports = {
             }
 
             await interaction.editReply({
-                content: `https://singlishdict.app/?q=${encodeURIComponent(data[0].trieId)}`
+                content: `https://singlishdict.app/?q=${data[0].trieId}`
             });
         } catch (err) {
             // ✅ prevent infinite thinking —

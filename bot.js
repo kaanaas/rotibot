@@ -144,7 +144,7 @@ client.on("messageCreate", async (message) => {
             }
 
             if (command == "dict") {
-                return message.reply(`https://singlishdict.app/?q=${encodeURIComponent(data[0].trieId)}`);
+                return message.reply(`https://singlishdict.app/?q=${data[0].trieId}`);
             } else if (command == "doc") {
                 const jsonString = JSON.stringify(data, null, 2);
                 // convert to file attachment (often >4000 char limit)

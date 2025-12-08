@@ -40,7 +40,7 @@ module.exports = {
             }
 
             await interaction.editReply({
-                content: `https://singlishdict.app/?q=${data[0].trieId}`
+                content: `https://singlishdict.app/?q=${data[0].trieId.replace(/\s+/g, '+')}`
             });
         } catch (err) {
             // ✅ prevent infinite thinking —

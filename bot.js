@@ -53,6 +53,19 @@ client.once("clientReady", async () => {
     await registerCommands(client);     // wait for slash commands auto update in commandHandler.js
 });
 
+client.on("error", err => {
+    console.error("Discord client error:", err);
+});
+
+client.on("shardDisconnect", (event, shardID) => {
+    console.warn(`Shard ${shardID} disconnected:`, event);
+});
+
+client.on("shardError", err => {
+    console.error("Shard error:", err);
+});
+
+
 client.on("interactionCreate", async (interaction) => {
     if (!interaction.isChatInputCommand()) return;
 

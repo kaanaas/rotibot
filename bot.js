@@ -160,8 +160,9 @@ client.on("messageCreate", async (message) => {
             message.reply("⚠️ Got problem calling the API.");
         }
     }
-})
+});
 
+console.log("DISCORD_TOKEN present?", !!process.env.DISCORD_TOKEN);
 client.login(process.env.DISCORD_TOKEN)
     .then(() => {
         console.log("✅ Discord client login successful");

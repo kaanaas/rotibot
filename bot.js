@@ -162,4 +162,10 @@ client.on("messageCreate", async (message) => {
     }
 })
 
-client.login(process.env.DISCORD_TOKEN);
+client.login(process.env.DISCORD_TOKEN)
+    .then(() => {
+        console.log("✅ Discord client login successful");
+    })
+    .catch(err => {
+        console.error("❌ Discord client login failed:", err);
+    });
